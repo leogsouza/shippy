@@ -69,12 +69,12 @@ func main() {
 	// Create a new service. Optionally include some options here.
 	srv := micro.NewService(
 		// This name must match the package name given in your protobuf definition
-		micro.Name("consignment"),
+		micro.Name("shippy.consignment.service"),
 	)
 
 	// Init will parse the command line flags.
 	srv.Init()
-
+	fmt.Println(srv)
 	// Register handler
 	pb.RegisterShippingServiceHandler(srv.Server(), &service{repo})
 
