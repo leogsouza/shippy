@@ -6,6 +6,7 @@ require (
 	github.com/golang/protobuf v1.3.1
 	github.com/google/btree v1.0.0 // indirect
 	github.com/hashicorp/golang-lru v0.5.1 // indirect
+	github.com/leogsouza/shippy/vessel-service v0.0.0-20190622184427-f0286cf89487
 	github.com/micro/go-micro v1.6.0
 	github.com/nats-io/nats-server/v2 v2.0.0 // indirect
 	golang.org/x/net v0.0.0-20190606173856-1492cefac77f

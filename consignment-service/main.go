@@ -6,7 +6,7 @@ import (
 	"log"
 
 	pb "github.com/leogsouza/shippy/consignment-service/proto/consignment"
-	vesselProto "github.com/leogsouza/vessel-service/proto/vessel"
+	vesselProto "github.com/leogsouza/shippy/vessel-service/proto/vessel"
 	"github.com/micro/go-micro"
 )
 
@@ -47,19 +47,20 @@ type service struct {
 // argument, these are handled by the gRPC server.
 func (s *service) CreateConsignment(ctx context.Context, req *pb.Consignment, res *pb.Response) error {
 
-// Here we call a client instance of our vessel service with our consignment weight,
-// and the amount of containers as the capacity value
-vesselResponse, err := s.vesselClient.FindAvailable(context.Background(), &vesselProto.Specification{
-	MaxWeight: req.Weight,
-	Capacity: int32(len(req.Containers)),
-})
-log.Printf("Found vessel: %s \n", vesselResponse.Vessel.Name)
-if err != nil {
-	return err
-}
+	// Here we call a client instance of our vessel service with our consignment weight,
+	// and the amount of containers as the capacity value
+	vesselResponse, err := s.vesselClient.FindAvailable(context.Background(), &vesselProto.Specification{
+		MaxWeight: req.Weight,
+		Capacity: int32(len(req.Containers)),
+	})
+	log.Printf("Found vessel: %s \n", vesselResponse.Vessel.Name)
+	if err != nil {
+		return err
+	}
 
-// We set the VesselId as the vessel we got back from aour
-// vessel service
+	// We set the VesselId as the vessel we got back from aour
+	// vessel service
+	req.VesselId = vesselResponse.Vessel.Id
 
 	// Save our consignment
 	consignment, err := s.repo.Create(req)
@@ -93,7 +94,7 @@ func main() {
 	// Init will parse the command line flags.
 	srv.Init()
 
-	vesselClient := vesselProto.NewVesselServiceClient("shippy.service.vessel", srv.Client())
+	vesselClient := vesselProto.NewVesselServiceClient("shippy.vessel.service", srv.Client())
 
 	// Register handler
 	pb.RegisterShippingServiceHandler(srv.Server(), &service{repo, vesselClient})
