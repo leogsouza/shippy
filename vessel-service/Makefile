@@ -5,4 +5,4 @@ build:
 run:
 	docker run -d -p 50052:50051 \
 		-e MICRO_SERVER_ADDRESS=:50051 \
-		vessel-service
+		--name vessel_service vessel-service
